@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Tài Khoản - Webside</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background-color: #fff; color: #333; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+        /* Header đơn giản */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 2px solid #eee; margin-bottom: 10px; }
+        .logo { font-size: 24px; font-weight: bold; }
+        .search-bar { border: 1px solid #ccc; padding: 5px 15px; width: 350px; height: 35px; border-radius: 4px; }
+
+        /* Breadcrumb */
+        .breadcrumb { font-size: 13px; color: #666; margin-bottom: 30px; }
+
+        /* Main Layout */
+        .account-grid { display: grid; grid-template-columns: 280px 1fr; gap: 40px; }
+
+        /* Cột trái: Profile Sidebar */
+        .profile-sidebar { text-align: center; }
+        .avatar-box { background-color: #ddd; padding: 40px 20px; border-radius: 4px; margin-bottom: 20px; }
+        .avatar-circle { width: 80px; height: 80px; background-color: #4da6ff; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 40px; }
+        .profile-name { font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
+        .profile-email { font-size: 14px; color: #555; }
+
+        .menu-list { list-style: none; text-align: left; margin-top: 30px; }
+        .menu-item { padding: 12px 15px; display: flex; align-items: center; gap: 15px; cursor: pointer; border-radius: 4px; transition: 0.2s; }
+        .menu-item:hover { background-color: #f0f0f0; }
+        .menu-item.active { color: #004a99; font-weight: bold; }
+        .icon { width: 20px; text-align: center; }
+
+        /* Cột phải: Content Area */
+        .content-title { font-size: 24px; font-weight: bold; margin-bottom: 20px; }
+        .tabs { display: flex; gap: 25px; border-bottom: 1px solid #eee; margin-bottom: 20px; }
+        .tab { padding: 10px 0; font-size: 14px; cursor: pointer; color: #666; position: relative; }
+        .tab.active { color: #004a99; font-weight: bold; }
+        .tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 3px; background-color: #004a99; }
+
+        .list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .saved-count { font-weight: bold; font-size: 16px; }
+
+        /* Bài viết Item */
+        .post-item { display: flex; gap: 15px; padding: 15px 0; border-bottom: 1px solid #f0f0f0; position: relative; }
+        .post-thumb { width: 140px; height: 85px; object-fit: cover; border-radius: 4px; }
+        .post-info { flex: 1; }
+        .post-title { font-size: 15px; font-weight: bold; margin-bottom: 5px; line-height: 1.4; }
+        .post-desc { font-size: 12px; color: #777; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .post-meta { font-size: 11px; color: #999; display: flex; gap: 12px; align-items: center; }
+        .save-btn { position: absolute; right: 10px; top: 15px; color: #004a99; cursor: pointer; }
+
+        /* Phân trang */
+        .pagination { display: flex; justify-content: flex-end; gap: 5px; margin-top: 20px; }
+        .page-node { padding: 5px 10px; border: 1px solid #ddd; font-size: 12px; cursor: pointer; border-radius: 2px; }
+        .page-node.active { background-color: #004a99; color: white; border-color: #004a99; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="logo">WEBSIDE</div>
+        <input type="text" class="search-bar" placeholder="Tìm kiếm...">
+    </header>
+
+    <div class="breadcrumb">Trang chủ > Tài khoản của tôi</div>
+
+    <div class="account-grid">
+        <div class="profile-sidebar">
+            <div class="avatar-box">
+                <div class="avatar-circle">👤</div>
+                <div class="profile-name">NGUYỄN VĂN A</div>
+                <div class="profile-email">nguyenvana@gmail.com</div>
+            </div>
+            
+            <ul class="menu-list">
+                <li class="menu-item"><span class="icon">👤</span> Thông tin cá nhân</li>
+                <li class="menu-item active"><span class="icon">🔖</span> Bài viết đã lưu</li>
+                <li class="menu-item"><span class="icon">💬</span> Bình luận của tôi</li>
+                <li class="menu-item"><span class="icon">🔒</span> Đổi mật khẩu</li>
+            </ul>
+        </div>
+
+        <div class="profile-content">
+            <h1 class="content-title">Trang tài khoản</h1>
+            
+            <div class="tabs">
+                <div class="tab">Thông tin cá nhân</div>
+                <div class="tab active">Bài viết đã lưu</div>
+                <div class="tab">Bình luận đã viết</div>
+                <div class="tab">Đổi mật khẩu</div>
+            </div>
+
+            <div class="list-header">
+                <div class="saved-count">Bài viết đã lưu (6)</div>
+            </div>
+
+            <div class="posts-list">
+                <div class="post-item">
+                    <img src="https://picsum.photos/id/1/140/85" class="post-thumb">
+                    <div class="post-info">
+                        <div class="post-title">Bách Hóa Xanh giảm giá sốc, deal đầu năm</div>
+                        <div class="post-desc">Trong tuần 50%, nội thế giảm nhiều tiện ích giúp bạn mua sắm nghỉ lễ...</div>
+                        <div class="post-meta">
+                            <span>👤 Nguyễn Văn A</span>
+                            <span>🕒 1 ngày trước</span>
+                            <span>📁 Kinh doanh</span>
+                        </div>
+                    </div>
+                    <div class="save-btn">🔖</div>
+                </div>
+
+                <div class="post-item">
+                    <img src="https://picsum.photos/id/2/140/85" class="post-thumb">
+                    <div class="post-info">
+                        <div class="post-title">Báo Hàn Quốc: "Hậu quả lớn nếu thua Việt Nam ở U23 châu Á"</div>
+                        <div class="post-desc">Cuộc rượt đuổi tỷ số giữa hai đội bóng tại vòng bảng U23 diễn ra gay cấn...</div>
+                        <div class="post-meta">
+                            <span>🕒 3 ngày trước</span>
+                            <span>📁 Thể thao</span>
+                        </div>
+                    </div>
+                    <div class="save-btn">🔖</div>
+                </div>
+                
+                </div>
+
+            <div class="pagination">
+                <div class="page-node"><</div>
+                <div class="page-node active">1</div>
+                <div class="page-node">2</div>
+                <div class="page-node">3</div>
+                <div class="page-node">Tiếp</div>
+                <div class="page-node">></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
