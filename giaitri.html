@@ -3,60 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GIẢI TRÍ VÒNG QUANH</title>
+    <title>GIẢI TRÍ VÒNG QUANH - News Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* 1. Cài đặt chung & Font chữ to rõ */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Montserrat:wght@900&display=swap');
+
+        :root {
+            --primary-red: #ff4757;
+            --dark-bg: #1e2227;
+            --text-main: #2f3542;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: #f4f6f8; color: var(--text-main); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* 2. Header & Thanh tìm kiếm TO */
+        .header-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 0;
+            background: #fff;
+        }
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .header-left i { font-size: 40px; color: var(--primary-red); }
+        .brand-name { 
+            font-family: 'Montserrat', sans-serif; 
+            font-size: 36px; /* Tên thương hiệu to */
+            font-weight: 900; 
+            color: var(--dark-bg);
+            letter-spacing: -2px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #f1f2f6;
+            padding: 15px 30px; /* Ô tìm kiếm to ra */
+            border-radius: 50px;
+            width: 450px; /* Chiều rộng lớn hơn */
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+        .search-box:focus-within {
+            background: #fff;
+            border-color: var(--primary-red);
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.1);
+        }
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            font-size: 18px; /* Chữ tìm kiếm to rõ */
+            font-weight: 500;
+        }
+        .search-box i { font-size: 20px; color: #a4b0be; }
+
+        /* 3. Thanh công cụ màu ĐỎ (Navigation) */
+        .main-navbar { 
+            background: var(--primary-red); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .main-navbar ul { 
+            display: flex; 
+            list-style: none; 
+            justify-content: center; 
+        }
+        .main-navbar ul li a {
+            display: block;
+            padding: 22px 40px; /* Menu to ra */
+            color: #fff;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 17px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .main-navbar ul li a:hover {
+            background: #e33e4d;
+            transform: translateY(-2px);
+        }
+
+        /* 4. Nội dung chính 65% - 35% */
+        .news-container {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr; /* Tỷ lệ vàng cân đối */
+            gap: 40px;
+            margin: 50px auto;
+        }
+
+        .news-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #000;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        .news-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: 0.5s;
+            opacity: 0.9;
+        }
+        .news-card:hover img { transform: scale(1.05); opacity: 1; }
+
+        .overlay-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 40px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            color: #fff;
+        }
+        .overlay-info h2 { font-size: 38px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+        .overlay-info h3 { font-size: 22px; font-weight: 700; }
+
+        .main-content .news-card { height: 600px; } /* Ảnh chính to ra */
+        .side-content { display: flex; flex-direction: column; gap: 30px; }
+        .small-overlay { height: 280px; }
+
+        /* Tin dạng danh sách (Standard Item) */
+        .standard-item { background: #fff; height: auto; }
+        .standard-item img { height: 220px; opacity: 1; }
+        .underlined-title { 
+            padding: 25px; 
+            font-size: 22px; 
+            font-weight: 800;
+            color: var(--dark-bg);
+            border-left: 5px solid var(--primary-red); /* Họa tiết vạch đỏ */
+        }
+
+        /* 5. Footer chuyên nghiệp */
+        footer {
+            background: var(--dark-bg);
+            color: #fff;
+            padding: 80px 0 40px;
+            margin-top: 60px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+        .footer-col h4 { color: var(--primary-red); font-size: 20px; margin-bottom: 25px; text-transform: uppercase; }
+        .footer-col p { color: #a4b0be; font-size: 15px; }
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid #333;
+            padding-top: 30px;
+            color: #747d8c;
+            font-size: 14px;
+        }
+
+        /* Responsive cho di động */
+        @media (max-width: 900px) {
+            .news-container { grid-template-columns: 1fr; }
+            .header-main { flex-direction: column; gap: 20px; }
+            .search-box { width: 100%; }
+            .main-navbar ul { flex-wrap: wrap; }
+        }
+    </style>
 </head>
 <body>
 
-    <header class="header-main">
+    <header class="header-main container">
         <div class="header-left">
-            <i class="fas fa-user"></i>
+            <i class="fas fa-play-circle"></i>
             <span class="brand-name">GIẢI TRÍ VÒNG QUANH</span>
         </div>
         <div class="header-right">
             <div class="search-box">
-                <input type="text" placeholder="Tìm kiếm...">
+                <input type="text" placeholder="Tìm kiếm nội dung bạn yêu thích...">
                 <i class="fas fa-search"></i>
             </div>
         </div>
     </header>
 
     <nav class="main-navbar">
-        <ul>
-            <li><a href="#">GIỚI SAO</a></li>
-            <li><a href="#">SÁCH</a></li>
-            <li><a href="#">PHIM</a></li>
-            <li><a href="#">NHẠC</a></li>
-        </ul>
+        <div class="container">
+            <ul>
+                <li><a href="#">GIỚI SAO</a></li>
+                <li><a href="#">SÁCH</a></li>
+                <li><a href="#">PHIM</a></li>
+                <li><a href="#">NHẠC</a></li>
+            </ul>
+        </div>
     </nav>
 
-    <div class="news-container">
-        <!-- Cột trái: 65% -->
+    <div class="news-container container">
         <main class="main-content">
             <article class="news-card overlay-item">
                 <img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=1000&h=700&fit=crop" alt="Tin chính">
                 <div class="overlay-info">
-                    <h2>Sự kiện giải trí nổi bật nhất trong tuần qua</h2>
+                    <h2>Đại nhạc hội bùng nổ: Những khoảnh khắc thăng hoa trên thảm đỏ</h2>
                 </div>
             </article>
         </main>
 
-        <!-- Cột phải: 35% -->
         <aside class="side-content">
             <article class="news-card overlay-item small-overlay">
                 <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=500&h=350&fit=crop" alt="Tin phụ 1">
                 <div class="overlay-info">
-                    <h3>Khám phá hậu trường phim mới</h3>
+                    <h3>Review: Bom tấn hành động đáng xem nhất năm</h3>
                 </div>
             </article>
 
             <article class="news-card standard-item">
                 <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&h=300&fit=crop" alt="Tin phụ 2">
-                <h3 class="underlined-title">Top những cuốn sách bán chạy nhất tháng</h3>
+                <h3 class="underlined-title">List 5 cuốn sách thay đổi tư duy bạn nên đọc ngay hôm nay</h3>
             </article>
         </aside>
     </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4 style="font-family: 'Montserrat'; font-size: 28px; color: #fff;">GIẢI TRÍ VÒNG QUANH</h4>
+                    <p>Kênh tin tức giải trí đa phương tiện, cập nhật xu hướng nóng hổi nhất về giới nghệ sĩ, âm nhạc và điện ảnh toàn cầu.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>CHUYÊN MỤC</h4>
+                    <p>Phỏng vấn độc quyền</p>
+                    <p>Bảng xếp hạng âm nhạc</p>
+                    <p>Hậu trường showbiz</p>
+                </div>
+                <div class="footer-col">
+                    <h4>LIÊN HỆ</h4>
+                    <p>Email: contact@giaitri.vn</p>
+                    <p>Hotline: 1900 123 456</p>
+                    <p>TP. Hồ Chí Minh, Việt Nam</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 GIẢI TRÍ VÒNG QUANH - Thiết kế đời sống. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>
