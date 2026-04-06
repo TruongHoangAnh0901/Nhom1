@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang Tin Tức Công Nghệ</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/news.css}">
+</head>
+<body>
+    <header>
+        <h1>Cổng Thông Tin Công Nghệ</h1>
+    </header>
+    <main class="news-list">
+        <div th:each="news : ${newsList}" class="news-item">
+            <h2 th:text="${news.title}">Tiêu đề bài viết</h2>
+            <p class="meta">Tác giả: <span th:text="${news.author}"></span> | Danh mục: <span th:text="${news.category}"></span></p>
+            <p th:text="${news.content}">Nội dung tóm tắt...</p>
+            <hr>
+        </div>
+    </main>
+</body>
+</html>

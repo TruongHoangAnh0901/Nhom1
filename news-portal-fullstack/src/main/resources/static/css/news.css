@@ -1,0 +1,12 @@
+.news-list {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 15px;
+}
+.news-item {
+    margin-bottom: 30px;
+    padding: 10px;
+    border-bottom: 1px dashed #ccc;
+}
+.news-item h2 { color: #333; }
+.meta { font-size: 0.9em; color: #666; font-style: italic; }
