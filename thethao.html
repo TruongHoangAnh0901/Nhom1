@@ -3,49 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thể thao - Tin tức bóng đá</title>
-    <link rel="stylesheet" href="style.css">
+    <title>THỂ THAO 247 - Tin tức bóng đá mới nhất</title>
+    
+    <style>
+        /* 1. Reset & Font chữ chuyên nghiệp */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Montserrat:wght@900&display=swap');
+
+        :root {
+            --dark-red: #B3191E; /* Màu đỏ đậm quyền lực */
+            --bright-red: #E31E24;
+            --text-dark: #1a1a1a;
+            --bg-body: #f8f9fa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-dark); line-height: 1.7; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* 2. Header & Logo */
+        .site-header { background: #fff; padding: 40px 0; border-bottom: 1px solid #eee; }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; }
+
+        .logo { 
+            font-family: 'Montserrat', sans-serif; 
+            font-size: 48px; /* Logo to rõ */
+            font-weight: 900; 
+            color: var(--dark-red); 
+            letter-spacing: -2px; 
+            text-decoration: none;
+        }
+        .logo span { color: #000; font-size: 35px; margin-left: 10px; }
+
+        /* Thanh tìm kiếm TO và RÕ */
+        .search-bar { 
+            display: flex; 
+            background: #f1f2f6; 
+            border-radius: 50px; 
+            padding: 15px 30px; 
+            width: 550px; /* Độ rộng lớn */
+            border: 2px solid transparent;
+            transition: 0.3s;
+        }
+        .search-bar:focus-within { 
+            background: #fff; 
+            border-color: var(--dark-red);
+            box-shadow: 0 10px 20px rgba(179, 25, 30, 0.1);
+        }
+        .search-bar input { 
+            border: none; 
+            background: transparent; 
+            outline: none; 
+            width: 100%; 
+            font-size: 20px; /* Chữ tìm kiếm to */
+            font-weight: 500;
+        }
+        .search-bar button { background: none; border: none; cursor: pointer; font-size: 24px; color: #555; }
+
+        /* 3. THANH CÔNG CỤ MÀU ĐỎ ĐẬM */
+        .nav-main { 
+            background: var(--dark-red); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .nav-main ul { display: flex; list-style: none; justify-content: center; }
+        .nav-main ul li a {
+            display: block;
+            padding: 22px 45px; /* Menu to và thoáng */
+            color: #fff;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 18px; /* Chữ menu to rõ */
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .nav-main ul li a:hover { background: var(--bright-red); }
+
+        /* 4. Nội dung bài viết 65% - 35% */
+        .page-content { 
+            display: grid; 
+            grid-template-columns: 1.8fr 1fr; 
+            gap: 50px; 
+            margin: 60px auto; 
+        }
+
+        /* Cột trái: Nội dung chính */
+        .article-body { background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .article-body img { 
+            width: 100%; 
+            height: 550px; /* Ảnh cực to */
+            object-fit: cover; 
+            border-radius: 10px; 
+            margin-bottom: 35px; 
+        }
+        .article-title { 
+            font-size: 46px; /* Tiêu đề to rõ */
+            font-weight: 900; 
+            line-height: 1.2; 
+            color: #000; 
+            margin-bottom: 25px; 
+        }
+        .article-body p { font-size: 22px; color: #333; text-align: justify; }
+
+        /* Cột phải: Sidebar */
+        .sidebar { display: flex; flex-direction: column; gap: 35px; }
+        .side-item { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; }
+        .side-item:hover { transform: translateY(-5px); }
+        .side-item img { width: 100%; height: 220px; object-fit: cover; }
+        .side-text { padding: 20px; }
+        .side-title { 
+            font-size: 22px; 
+            font-weight: 800; 
+            color: var(--dark-red); 
+            text-decoration: none; 
+            line-height: 1.4;
+        }
+
+        /* 5. Footer */
+        footer { background: #111; color: #fff; padding: 80px 0 40px; margin-top: 80px; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; }
+        .footer-col h4 { color: var(--bright-red); font-size: 24px; margin-bottom: 25px; font-family: 'Montserrat'; }
+        .footer-bottom { 
+            text-align: center; 
+            border-top: 1px solid #333; 
+            padding-top: 30px; 
+            margin-top: 50px; 
+            color: #666; 
+            font-size: 16px; 
+        }
+
+        @media (max-width: 900px) {
+            .page-content { grid-template-columns: 1fr; }
+            .header-flex { flex-direction: column; gap: 20px; }
+            .search-bar { width: 100%; }
+        }
+    </style>
 </head>
 <body>
+
     <header class="site-header">
-        <div class="header-container">
-            <div class="logo">
-                <strong>THỂ THAO</strong>
-                <span class="sports-icons">⚽🏀🎾</span>
-            </div>
+        <div class="container header-flex">
+            <a href="#" class="logo">THỂ THAO<span>⚽🏀🎾</span></a>
             <div class="search-bar">
-                <input type="text" placeholder="Tìm kiếm tin tức...">
+                <input type="text" placeholder="Tìm kiếm tin tức thể thao nóng hổi...">
                 <button>🔍</button>
             </div>
         </div>
-        <nav class="nav">
-            <a href="#">LỊCH THI ĐẤU</a>
-            <a href="#">GIẢI ĐẤU CHUYÊN NGHIỆP</a>
-            <a href="#">ESPORT</a>
-            <a href="#">HẬU TRƯỜNG</a>
-        </nav>
     </header>
 
-    <main class="page-shell">
+    <nav class="nav-main">
+        <div class="container">
+            <ul>
+                <li><a href="#">LỊCH THI ĐẤU</a></li>
+                <li><a href="#">GIẢI ĐẤU CHUYÊN NGHIỆP</a></li>
+                <li><a href="#">ESPORT</a></li>
+                <li><a href="#">HẬU TRƯỜNG</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container page-content">
         <section class="article-body">
-            <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1200&q=80" alt="Cầu thủ Hàn Quốc">
+            <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1200&q=80" alt="Bóng đá">
             <h1 class="article-title">Báo Hàn Quốc: ‘Hậu quả lớn nếu thua Việt Nam ở U23 châu Á’</h1>
-            <p>Giới truyền thông xứ Kim Chi bày tỏ sự lo ngại sâu sắc trước màn đối đầu kịch tính với đội tuyển U23 Việt Nam, nhấn mạnh rằng một kết quả bất lợi có thể dẫn đến những thay đổi mang tính hệ thống trong công tác huấn luyện trẻ của quốc gia này.</p>
+            <p>Giới truyền thông xứ Kim Chi bày tỏ sự lo ngại sâu sắc trước màn đối đầu kịch tính với đội tuyển U23 Việt Nam. Họ nhấn mạnh rằng một kết quả bất lợi có thể dẫn đến những thay đổi mang tính hệ thống trong công tác huấn luyện trẻ của quốc gia này, đồng thời thừa nhận sức mạnh đáng gờm của các chiến binh Sao Vàng.</p>
         </section>
 
-        <!-- Cột phải -->
-            <aside class="sidebar">
-                <div class="side-news-item">
-                    <img class="side-image" src="https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?q=80&w=1000&auto=format&fit=crop" width="100%" height="auto" alt="Cầu thủ bóng đá đang nỗ lực thi đấu trên sân cỏ chuyên nghiệp">
-                    <a href="#" class="side-title">Cầu thủ Hàn Quốc không muốn xếp sau Việt Nam tại bảng đấu</a>
+        <aside class="sidebar">
+            <div class="side-item">
+                <img src="https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?q=80&w=1000&auto=format&fit=crop" alt="Cầu thủ">
+                <div class="side-text">
+                    <a href="#" class="side-title">Cầu thủ Hàn Quốc quyết tâm không để xếp sau Việt Nam tại bảng đấu</a>
                 </div>
+            </div>
 
-                <div class="side-news-item">
-                    <img class="side-image" src="https://images.unsplash.com/photo-1504450758481-7338eba7524a?q=80&w=1000&auto=format&fit=crop" width="100%" height="auto" alt="Hình ảnh sân vận động bóng đá rực lửa trong đêm thi đấu">
-                    <a href="#" class="side-title">Việt Nam - Hàn Quốc: Trận chiến sinh tử cho tấm vé đi tiếp</a>
+            <div class="side-item">
+                <img src="https://images.unsplash.com/photo-1504450758481-7338eba7524a?q=80&w=1000&auto=format&fit=crop" alt="Sân vận động">
+                <div class="side-text">
+                    <a href="#" class="side-title">Việt Nam - Hàn Quốc: Trận quyết chiến cho tấm vé đi tiếp vào vòng trong</a>
                 </div>
-            </aside>
-        </main>
-    </div>
+            </div>
+        </aside>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>THỂ THAO 247</h4>
+                    <p>Cổng thông tin tin tức thể thao đa phương tiện nhanh nhất, chính xác nhất Việt Nam.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>DANH MỤC</h4>
+                    <p>Ngoại hạng Anh</p>
+                    <p>Champions League</p>
+                    <p>Tennis / Golf</p>
+                </div>
+                <div class="footer-col">
+                    <h4>LIÊN HỆ</h4>
+                    <p>Email: toasoan@thethao.vn</p>
+                    <p>Hotline: 1900 9999</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 THỂ THAO 247 - Developed by Phạm Anh Khoa.
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
