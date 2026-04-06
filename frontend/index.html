@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thời Báo 24H – Tin tức nhanh, chính xác 24/7</title>
+  <meta name="description" content="Thời Báo 24H – Cập nhật tin tức mới nhất 24/7 về thời sự, kinh doanh, thể thao, thế giới, pháp luật và công nghệ."/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#e8192c', navy: '#1a3c7c' },
+          fontFamily: { sans: ['"Be Vietnam Pro"', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body { background: #f4f4f4; }
+    .line-clamp-2 { display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden; }
+    .line-clamp-3 { display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden; }
+
+    /* Slider */
+    .slide { display:none; position:absolute; inset:0; }
+    .slide.active { display:block; }
+
+    /* Nav underline */
+    .nav-item { position:relative; padding-bottom:6px; font-weight:700; font-size:14px; letter-spacing:.05em; color:#222; text-decoration:none; text-transform:uppercase; }
+    .nav-item:hover { color:#e8192c; }
+    .nav-item.active { color:#e8192c; }
+    .nav-item.active::after { content:''; position:absolute; left:0; bottom:0; width:100%; height:3px; background:#e8192c; }
+
+    /* Section title */
+    .section-title { font-size:18px; font-weight:800; text-transform:uppercase; color:#111; border-bottom:3px solid #e8192c; padding-bottom:6px; display:inline-block; }
+
+    /* Article card hover */
+    .card-link:hover h3 { color:#e8192c; }
+    .card-link img { transition: transform .3s; }
+    .card-link:hover img { transform: scale(1.03); }
+
+    /* Skeleton */
+    .skeleton { background: linear-gradient(90deg,#eee 25%,#ddd 50%,#eee 75%); background-size:200% 100%; animation: shimmer 1.5s infinite; border-radius:2px; }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  </style>
+</head>
+<body class="font-sans text-gray-800">
+
+<!-- ==================== HEADER ==================== -->
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+  <div class="max-w-5xl mx-auto px-4 flex items-center h-14 gap-8">
+
+    <!-- Logo -->
+    <a href="/" class="flex-shrink-0">
+      <div class="bg-primary text-white font-black leading-tight px-2 py-1 rounded text-sm">
+        <div class="tracking-widest text-xs">THỜI BÁO</div>
+        <div class="flex items-center gap-0.5">
+          <span class="text-yellow-300">⊕</span>
+          <span class="text-base font-black">24H</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Nav -->
+    <nav class="flex items-center gap-7 flex-1">
+      <a href="#" class="nav-item active">Thời Sự</a>
+      <a href="#" class="nav-item">Kinh Doanh</a>
+      <a href="#" class="nav-item">Thế Giới</a>
+      <a href="#" class="nav-item">Pháp Luật</a>
+      <a href="#" class="nav-item">Thể Thao</a>
+      <a href="#" class="nav-item">Công Nghệ</a>
+    </nav>
+
+    <!-- Search + Login -->
+    <div class="flex items-center gap-3 flex-shrink-0">
+      <button id="searchBtn" class="text-gray-500 hover:text-primary transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </button>
+      <button class="flex items-center gap-1.5 bg-navy text-white text-xs font-bold px-4 py-2 rounded hover:opacity-90 transition">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        ĐĂNG NHẬP
+      </button>
+    </div>
+  </div>
+
+  <!-- Search bar -->
+  <div id="searchBar" class="hidden bg-white border-t border-gray-100 px-4 py-2">
+    <div class="max-w-5xl mx-auto flex gap-2">
+      <input id="searchInput" type="text" placeholder="Tìm kiếm tin tức..." class="flex-1 border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-primary"/>
+      <button id="searchSubmit" class="bg-primary text-white px-4 py-1.5 rounded text-sm font-bold">Tìm</button>
+    </div>
+  </div>
+</header>
+
+<!-- ==================== MAIN ==================== -->
+<main class="max-w-5xl mx-auto px-4 py-4">
+
+  <!-- ===== HERO ===== -->
+  <div class="flex gap-3 mb-5" style="height:310px;">
+
+    <!-- Slider -->
+    <div class="relative overflow-hidden bg-black flex-shrink-0" style="width:57%;">
+      <div class="slide active">
+        <img src="https://picsum.photos/seed/eu-summit/700/400" class="w-full h-full object-cover opacity-80" style="height:310px;" alt=""/>
+        <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(0,0,0,.82) 0%,rgba(0,0,0,.1) 55%,transparent 100%);"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
+          <h2 class="font-extrabold text-base leading-snug mb-1">CÁC NHÀ LÃNH ĐẠO EU HỌP THƯỢNG ĐỈNH VỀ GREENLAND</h2>
+          <p class="text-gray-300 text-xs flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            14:43 23/01/2026
+          </p>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="https://picsum.photos/seed/football-vn2/700/400" class="w-full h-full object-cover opacity-80" style="height:310px;" alt=""/>
+        <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(0,0,0,.82) 0%,rgba(0,0,0,.1) 55%,transparent 100%);"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
+          <h2 class="font-extrabold text-base leading-snug mb-1">U23 VIỆT NAM GIÀNH CHIẾN THẮNG LỊCH SỬ TẠI GIẢI CHÂU Á</h2>
+          <p class="text-gray-300 text-xs flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            22 giờ trước
+          </p>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="https://picsum.photos/seed/economy-vn2/700/400" class="w-full h-full object-cover opacity-80" style="height:310px;" alt=""/>
+        <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(0,0,0,.82) 0%,rgba(0,0,0,.1) 55%,transparent 100%);"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
+          <h2 class="font-extrabold text-base leading-snug mb-1">GDP VIỆT NAM TĂNG TRƯỞNG ẤN TƯỢNG 7,5% TRONG QUÝ I/2026</h2>
+          <p class="text-gray-300 text-xs flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            09:00 23/01/2026
+          </p>
+        </div>
+      </div>
+
+      <!-- Dots + arrows -->
+      <div class="absolute bottom-3 left-4 flex gap-1.5 z-10" id="dots">
+        <span class="dot w-2 h-2 rounded-full bg-white cursor-pointer" data-index="0"></span>
+        <span class="dot w-2 h-2 rounded-full bg-white/40 cursor-pointer" data-index="1"></span>
+        <span class="dot w-2 h-2 rounded-full bg-white/40 cursor-pointer" data-index="2"></span>
+      </div>
+      <div class="absolute bottom-2 right-3 flex gap-1 z-10">
+        <button id="prevSlide" class="w-6 h-6 rounded-full bg-white/25 hover:bg-white/50 flex items-center justify-center transition-colors">
+          <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
+        </button>
+        <button id="nextSlide" class="w-6 h-6 rounded-full bg-white/25 hover:bg-white/50 flex items-center justify-center transition-colors">
+          <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Red sidebar news -->
+    <div class="flex-1 bg-primary flex flex-col divide-y divide-red-500 overflow-hidden">
+      <a href="#" class="flex gap-2.5 p-3 hover:bg-red-700 transition group">
+        <img src="https://picsum.photos/seed/cold-vn/110/74" class="w-24 h-16 object-cover flex-shrink-0" alt=""/>
+        <div>
+          <h3 class="text-white font-bold text-sm leading-snug line-clamp-3">Miền Bắc sẽ đón thêm nhiều đợt không khí lạnh</h3>
+          <p class="text-red-200 text-xs mt-1.5 flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            5 GIỜ TRƯỚC
+          </p>
+        </div>
+      </a>
+      <a href="#" class="flex gap-2.5 p-3 hover:bg-red-700 transition group">
+        <img src="https://picsum.photos/seed/csgt-hcm/110/74" class="w-24 h-16 object-cover flex-shrink-0" alt=""/>
+        <div>
+          <h3 class="text-white font-bold text-sm leading-snug line-clamp-3">Đỗ xe máy trên vỉa hè: CSGT TP.HCM ghi hình phạt người gần 100 trường hợp</h3>
+          <p class="text-red-200 text-xs mt-1.5 flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            20:40 20/01/2026
+          </p>
+        </div>
+      </a>
+      <a href="#" class="flex gap-2.5 p-3 hover:bg-red-700 transition group">
+        <img src="https://picsum.photos/seed/navy-cam/110/74" class="w-24 h-16 object-cover flex-shrink-0" alt=""/>
+        <div>
+          <h3 class="text-white font-bold text-sm leading-snug line-clamp-3">Sau khi được Trung Quốc viện trợ cải tạo, căn cứ hải quân Campuchia lần đầu đón tàu Mỹ</h3>
+          <p class="text-red-200 text-xs mt-1.5 flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            9:45 22/01/2026
+          </p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== CONTENT AREA ===== -->
+  <div class="flex gap-5">
+
+    <!-- LEFT MAIN (65%) -->
+    <div style="flex:0 0 63%;">
+
+      <!-- TIN MỚI NHẤT -->
+      <div class="flex items-end justify-between mb-2">
+        <span class="section-title">Tin Mới Nhất</span>
+        <div class="flex gap-1 mb-1">
+          <button class="w-6 h-6 border border-gray-400 hover:border-primary hover:text-primary flex items-center justify-center text-gray-500 transition-colors">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <button class="w-6 h-6 border border-gray-400 hover:border-primary hover:text-primary flex items-center justify-center text-gray-500 transition-colors">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Cards skeleton -->
+      <div id="articlesSkeleton" class="grid grid-cols-3 gap-3 mb-5">
+        <div class="bg-white"><div class="skeleton h-32 w-full"></div><div class="p-2 space-y-1.5"><div class="skeleton h-3 w-full rounded"></div><div class="skeleton h-3 w-4/5 rounded"></div><div class="skeleton h-2.5 w-1/3 rounded mt-1"></div></div></div>
+        <div class="bg-white"><div class="skeleton h-32 w-full"></div><div class="p-2 space-y-1.5"><div class="skeleton h-3 w-full rounded"></div><div class="skeleton h-3 w-4/5 rounded"></div><div class="skeleton h-2.5 w-1/3 rounded mt-1"></div></div></div>
+        <div class="bg-white"><div class="skeleton h-32 w-full"></div><div class="p-2 space-y-1.5"><div class="skeleton h-3 w-full rounded"></div><div class="skeleton h-3 w-4/5 rounded"></div><div class="skeleton h-2.5 w-1/3 rounded mt-1"></div></div></div>
+      </div>
+
+      <!-- Cards (from API) -->
+      <div id="articlesGrid" class="grid grid-cols-3 gap-3 mb-5 hidden"></div>
+
+      <!-- More news list (2 col) -->
+      <div id="moreNewsList" class="grid grid-cols-2 gap-x-4 gap-y-4 bg-white p-4">
+        <!-- skeleton -->
+        <div class="flex gap-2"><div class="skeleton w-24 h-16 flex-shrink-0"></div><div class="flex-1 space-y-1.5 pt-1"><div class="skeleton h-3 w-full rounded"></div><div class="skeleton h-3 w-4/5 rounded"></div><div class="skeleton h-2.5 w-1/3 rounded mt-2"></div></div></div>
+        <div class="flex gap-2"><div class="skeleton w-24 h-16 flex-shrink-0"></div><div class="flex-1 space-y-1.5 pt-1"><div class="skeleton h-3 w-full rounded"></div><div class="skeleton h-3 w-4/5 rounded"></div><div class="skeleton h-2.5 w-1/3 rounded mt-2"></div></div></div>
+        <div class="flex gap-2"><div class="skeleton w-24 h-16 flex-shrink-0"></div><div class="flex-1 space-y-1.5 pt-1"><div class="skeleton h-3 w-full rounded"></div><div class="skeleton h-3 w-4/5 rounded"></div><div class="skeleton h-2.5 w-1/3 rounded mt-2"></div></div></div>
+        <div class="flex gap-2"><div class="skeleton w-24 h-16 flex-shrink-0"></div><div class="flex-1 space-y-1.5 pt-1"><div class="skeleton h-3 w-full rounded"></div><div class="skeleton h-3 w-4/5 rounded"></div><div class="skeleton h-2.5 w-1/3 rounded mt-2"></div></div></div>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDEBAR (35%) -->
+    <div style="flex:1;" class="space-y-4">
+
+      <!-- Quảng cáo -->
+      <div class="bg-navy flex flex-col items-center justify-center text-center py-10">
+        <p class="text-yellow-400 font-black text-2xl mb-3">QUẢNG CÁO</p>
+        <button class="bg-primary text-white font-bold text-sm px-5 py-2 hover:bg-red-700 transition">Xem chi tiết</button>
+      </div>
+
+      <!-- Đọc nhiều -->
+      <div class="bg-white p-3">
+        <div class="mb-2"><span class="section-title text-base">Đọc Nhiều</span></div>
+        <div id="popularList" class="space-y-3">
+          <div class="flex gap-2"><div class="skeleton w-20 h-14 flex-shrink-0"></div><div class="flex-1 space-y-1.5 pt-1"><div class="skeleton h-3 w-full rounded"></div><div class="skeleton h-3 w-4/5 rounded"></div></div></div>
+          <div class="flex gap-2"><div class="skeleton w-20 h-14 flex-shrink-0"></div><div class="flex-1 space-y-1.5 pt-1"><div class="skeleton h-3 w-full rounded"></div><div class="skeleton h-3 w-4/5 rounded"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="bg-gray-900 text-gray-400 mt-6 py-8">
+  <div class="max-w-5xl mx-auto px-4 grid grid-cols-4 gap-8 text-sm">
+    <div>
+      <div class="bg-primary text-white font-black leading-tight px-2 py-1 rounded text-sm inline-block mb-3">
+        <div class="tracking-widest text-xs">THỜI BÁO</div>
+        <div class="flex items-center gap-0.5"><span class="text-yellow-300">⊕</span><span class="text-base">24H</span></div>
+      </div>
+      <p class="text-xs leading-relaxed">Tin tức nhanh, chính xác và toàn diện 24/7.</p>
+    </div>
+    <div>
+      <h4 class="font-bold text-white mb-2 uppercase text-xs">Chuyên mục</h4>
+      <ul class="space-y-1.5 text-xs">
+        <li><a href="#" class="hover:text-primary transition-colors">Thời sự</a></li>
+        <li><a href="#" class="hover:text-primary transition-colors">Kinh doanh</a></li>
+        <li><a href="#" class="hover:text-primary transition-colors">Thế giới</a></li>
+        <li><a href="#" class="hover:text-primary transition-colors">Pháp luật</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-bold text-white mb-2 uppercase text-xs">Khác</h4>
+      <ul class="space-y-1.5 text-xs">
+        <li><a href="#" class="hover:text-primary transition-colors">Thể thao</a></li>
+        <li><a href="#" class="hover:text-primary transition-colors">Công nghệ</a></li>
+        <li><a href="#" class="hover:text-primary transition-colors">Giải trí</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-bold text-white mb-2 uppercase text-xs">Liên hệ</h4>
+      <p class="text-xs mb-1">📧 thoibao24h@gmail.com</p>
+      <p class="text-xs">📞 1900 xxxx</p>
+    </div>
+  </div>
+  <div class="border-t border-gray-800 mt-6 pt-4 text-center text-xs">© 2026 Thời Báo 24H. All rights reserved.</div>
+</footer>
+
+<script>
+// ===== SLIDER =====
+const slides = document.querySelectorAll('.slide');
+const dots   = document.querySelectorAll('.dot');
+let cur = 0, tmr;
+
+function goTo(n) {
+  slides[cur].classList.remove('active');
+  dots[cur].classList.replace('bg-white','bg-white/40');
+  cur = (n + slides.length) % slides.length;
+  slides[cur].classList.add('active');
+  dots[cur].classList.replace('bg-white/40','bg-white');
+}
+function startAuto() { tmr = setInterval(() => goTo(cur+1), 4500); }
+function stopAuto()  { clearInterval(tmr); }
+
+document.getElementById('nextSlide').onclick = () => { stopAuto(); goTo(cur+1); startAuto(); };
+document.getElementById('prevSlide').onclick = () => { stopAuto(); goTo(cur-1); startAuto(); };
+dots.forEach(d => d.addEventListener('click', () => { stopAuto(); goTo(+d.dataset.index); startAuto(); }));
+startAuto();
+
+// ===== SEARCH =====
+document.getElementById('searchBtn').onclick = () => document.getElementById('searchBar').classList.toggle('hidden');
+document.getElementById('searchSubmit').onclick = () => {
+  const q = document.getElementById('searchInput').value.trim();
+  if (q) loadArticles(`/api/articles?keyword=${encodeURIComponent(q)}`);
+};
+
+// ===== NAV =====
+document.querySelectorAll('.nav-item').forEach(a => {
+  a.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// ===== HELPERS =====
+const clock = `<svg style="width:11px;height:11px;display:inline;flex-shrink:0;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+
+function imgOf(a, w, h) {
+  return a.thumbnailUrl || `https://picsum.photos/seed/a${a.id}/${w}/${h}`;
+}
+
+function makeCard(a) {
+  return `<a href="#" class="card-link bg-white block overflow-hidden">
+    <div class="overflow-hidden"><img src="${imgOf(a,300,200)}" class="w-full object-cover" style="height:130px;" alt="" onerror="this.src='https://picsum.photos/seed/fb${a.id}/300/200'"/></div>
+    <div class="p-2">
+      <h3 class="font-bold text-sm leading-snug line-clamp-3 transition-colors">${a.title}</h3>
+      <p class="text-gray-400 text-xs mt-1.5 flex items-center gap-1">${clock} Bài viết #${a.id}</p>
+    </div>
+  </a>`;
+}
+
+function makeListItem(a) {
+  return `<a href="#" class="card-link flex gap-2">
+    <img src="${imgOf(a,130,88)}" class="flex-shrink-0 object-cover" style="width:96px;height:64px;" alt="" onerror="this.src='https://picsum.photos/seed/li${a.id}/130/88'"/>
+    <div>
+      <h3 class="font-semibold text-sm leading-snug line-clamp-3 transition-colors">${a.title}</h3>
+      <p class="text-gray-400 text-xs mt-1 flex items-center gap-1">${clock} Bài viết #${a.id}</p>
+    </div>
+  </a>`;
+}
+
+function makePopular(a) {
+  return `<a href="#" class="card-link flex gap-2">
+    <img src="${imgOf(a,100,70)}" class="flex-shrink-0 object-cover" style="width:80px;height:56px;" alt="" onerror="this.src='https://picsum.photos/seed/po${a.id}/100/70'"/>
+    <div>
+      <h3 class="text-gray-700 font-semibold text-xs leading-snug line-clamp-3 transition-colors">${a.title}</h3>
+      <p class="text-gray-400 text-xs mt-1">Bài viết #${a.id}</p>
+    </div>
+  </a>`;
+}
+
+// ===== LOAD ARTICLES =====
+const DEMO = [
+  {id:1,title:'Kinh doanh dưới giá vốn, Cảng Phước An (PAP) ghi nhận lỗ 504,69 tỷ đồng trong năm 2025.'},
+  {id:2,title:'Tin pháp luật nổi bật 24h qua: Bắt giữ đối tượng truy nã trốn trong vườn thanh long.'},
+  {id:3,title:'Thủ tướng gửi thư chúc mừng Đội tuyển bóng đá nam U23 Việt Nam'},
+  {id:4,title:'Galaxy S26 lộ diện công nghệ mới: Gọi điện thoại qua vệ tinh sắp trở thành hiện thực?'},
+  {id:5,title:'Thanh Hóa ước tính đón 272.000 lượt khách du lịch trong tháng 1/2026'},
+  {id:6,title:'Ukraine nghĩ để lột tên lửa siêu vượt âm Zircon của Nga'},
+];
+
+async function loadArticles(url = '/api/articles') {
+  const skl  = document.getElementById('articlesSkeleton');
+  const grid = document.getElementById('articlesGrid');
+  const more = document.getElementById('moreNewsList');
+  const pop  = document.getElementById('popularList');
+
+  skl.classList.remove('hidden');
+  grid.classList.add('hidden');
+
+  let articles = [];
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error();
+    articles = await res.json();
+  } catch {
+    articles = DEMO;
+  }
+
+  // Top 3 cards
+  const top3 = articles.slice(0,3);
+  grid.innerHTML = top3.length
+    ? top3.map(makeCard).join('')
+    : `<div class="col-span-3 text-center py-8 text-gray-400 text-sm bg-white">Chưa có bài viết. Hãy thêm qua POST /api/articles</div>`;
+
+  // More news
+  const rest = articles.slice(3,9);
+  more.innerHTML = rest.length
+    ? rest.map(makeListItem).join('')
+    : DEMO.slice(3).map(makeListItem).join('');
+
+  // Popular
+  const popItems = [...articles].reverse().slice(0,3);
+  pop.innerHTML = (popItems.length ? popItems : DEMO.slice(0,2)).map(makePopular).join('');
+
+  skl.classList.add('hidden');
+  grid.classList.remove('hidden');
+}
+
+loadArticles();
+</script>
+</body>
+</html>
